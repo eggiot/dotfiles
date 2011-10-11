@@ -1,0 +1,113 @@
+# UBUNTU-CONKY
+# A comprehensive conky script, configulight green for use on
+# Ubuntu / Debian Gnome, without the need for any external scripts.
+#
+# Based on conky-jc and the default .conkyrc.
+# INCLUDES:
+# - tail of /var/log/messages 
+# - netstat connections to your computer
+#
+# -- Pengo (conky@pengo.us)
+#
+
+# Create own window instead of using desktop (requilight green in nautilus)
+own_window yes
+own_window_hints undecorated,below,skip_taskbar,sticky,skip_pager
+background yes
+own_window_type override
+
+# Use double buffering (light greenuces flicker, may not work for everyone)
+double_buffer yes
+
+# fiddle with window
+use_spacer yes
+use_xft yes
+
+# Update interval in seconds
+update_interval 3.0
+
+# Minimum size of text area
+minimum_size 240 5
+
+# Draw shades?
+draw_shades yes
+
+# Text stuff
+draw_outline no # amplifies text if yes
+draw_borders no
+
+uppercase no # set to yes if you want all text to be in uppercase
+
+# Stippled borders?
+stippled_borders 0
+
+# border margins
+border_margin 4
+
+# border width
+border_width 2
+
+# Default colors and also border colors, grey90 == #e5e5e5
+default_color light grey
+default_shade_color black
+default_outline_color grey
+own_window_colour black
+own_window_transparent yes
+
+# Text alignment, other possible values are commented
+#alignment top_left
+alignment top_right
+#alignment bottom_left
+#alignment bottom_right
+
+# Gap between borders of screen and text
+gap_x 10
+gap_y 10
+
+# stuff after 'TEXT' will be formatted on screen
+
+override_utf8_locale no
+xftfont DejaVu Sans Condensed:size=8
+xftalpha 0.8
+
+
+TEXT
+SYSTEM ${hr 2}$color
+Kernel:$color $sysname $kernel on $machine
+Uptime: $uptime
+
+RESOURCES ${hr 2}
+CPU (Avg):   ${freq_g}Ghz ${alignr}${cpu cpu0}% ${cpubar cpu0 5,80}
+CPU (Core 1): ${freq_g cpu1}Ghz ${alignr}${cpu cpu1}% ${cpubar cpu1 5,80}
+CPU (Core 2): ${freq_g cpu2}Ghz ${alignr}${cpu cpu2}% ${cpubar cpu2 5,80}
+
+Average
+${cpugraph cpu0 42AE4A eeeeee -t }
+Core 1 $alignr Core 2
+${cpugraph cpu1 25,120 42AE4A eeeeee -t}  $alignr${cpugraph cpu2 25,120 42AE4A eeeeee -t}
+Processes: $processes Run: $running_processes
+
+RAM:   $memmax ${alignr}$memperc% ${membar 3,100}
+SWAP:  $swapmax${alignr}$swapperc% ${swapbar 3,100}
+
+Highest CPU: ${alignr}Highest memory:
+ ${top name 1}${top cpu 1}% ${alignr}${top_mem name 1}${top_mem mem 1}%
+ ${top name 2}${top cpu 2}% ${alignr}${top_mem name 2}${top_mem mem 2}%
+ ${top name 3}${top cpu 3}% ${alignr}${top_mem name 3}${top_mem mem 3}%
+ ${top name 4}${top cpu 4}% ${alignr}${top_mem name 4}${top_mem mem 4}%
+
+DISK ${hr 2}
+ROOT:    ${fs_size /}${alignr}${fs_used_perc /}% ${fs_bar 3,100 /}
+HOME:    ${fs_size /home}${alignr}${fs_used_perc /home}% ${fs_bar 3,100 /home}
+1TB:     ${fs_size /media/1TB}${alignr}${fs_used_perc /media/1TB}% ${fs_bar 3,100 /media/1TB}
+
+IO (read):$color ${diskio_read}${alignr}IO (write): $color${diskio_write}
+${diskiograph_read 25,120 42AE4A eeeeee -t }${alignr}${diskiograph_write 25,120 42AE4A eeeeee -t }
+
+NETWORK ${hr 2}$color
+ESSID: ${wireless_essid wlan0}${alignr}${wireless_mode wlan0}
+Link:${alignr}${wireless_link_qual_perc wlan0}${wireless_link_bar 3,100 wlan0}
+
+Down: ${downspeed wlan0}${alignr}Up: ${upspeed wlan0}
+${downspeedgraph wlan0 25,120 000000 ff4c00 -t}${alignr}${upspeedgraph wlan0 25,120 000000 42ae4a -t}
+Total: ${totaldown wlan0} ${alignr}Total: ${totalup wlan0}
