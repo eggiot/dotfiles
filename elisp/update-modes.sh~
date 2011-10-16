@@ -1,0 +1,9 @@
+#!/bin/bash
+
+## SLIME
+
+cvs -d :pserver:anonymous@common-lisp.net:/project/slime/cvsroot login
+
+# password is "anonymous"
+
+cvs -d :pserver:anonymous@common-lisp.net:/project/slime/cvsroot checkout slime
