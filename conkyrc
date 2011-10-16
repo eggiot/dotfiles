@@ -4,7 +4,7 @@
 #
 # Based on conky-jc and the default .conkyrc.
 # INCLUDES:
-# - tail of /var/log/messages 
+# - tail of /var/log/messages
 # - netstat connections to your computer
 #
 # -- Pengo (conky@pengo.us)
@@ -51,8 +51,8 @@ border_width 2
 default_color light grey
 default_shade_color black
 default_outline_color grey
-own_window_colour black
-own_window_transparent yes
+own_window_colour grey20
+own_window_transparent no
 
 # Text alignment, other possible values are commented
 #alignment top_left

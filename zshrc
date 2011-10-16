@@ -1,7 +1,7 @@
 ########################################################
 # .zshrc                                               #
 # by Eliot Walker                                      #
-# 11 Oct 2011                                          #
+# November 2008                                        #
 #                                                      #
 # requires aptitude most sox scrot git feh w3m mplayer #
 ########################################################
@@ -11,6 +11,8 @@
 ###########
 
 # load zsh modules
+
+zstyle :compinstall filename '/home/eliot/.zshrc'
 autoload -U compinit promptinit zcalc zsh-mime-setup
 compinit
 promptinit
@@ -29,6 +31,9 @@ setopt EXTENDED_GLOB
 setopt IGNORE_EOF
 setopt MENUCOMPLETE
 setopt ALL_EXPORT
+
+# keybindings
+
 
 ###########
 # HISTORY #
@@ -52,20 +57,13 @@ zle -N history-beginning-search-forward-end history-search-end
 bindkey '^[[A' history-beginning-search-backward-end
 bindkey '^[[B' history-beginning-search-forward-end
 
-
 setopt autocd extendedglob nomatch
 unsetopt appendhistory beep
 bindkey -e
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
-zstyle :compinstall filename '/home/eliot/.zshrc'
-
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
 
 # PROMPT
-PROMPT='%n@%M:%~$ ' # default prompt
+#PROMPT='%n@%M:%~$ ' # default prompt
+prompt bart
 
 ##############
 # MY ALIASES #
@@ -123,8 +121,9 @@ alias scrot="scrot -q 100"
 alias git-init="git init-db"
 alias git-commit="git commit -a"
 alias git-add-all="git add -A"
+alias gcm="git commit -m"
 
-# suffix aliases
+# register specific applications for suffixes
 alias -s png=feh
 alias -s jpg=feh
 alias -s jpeg=feh

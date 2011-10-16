@@ -25,7 +25,7 @@
 
 ;; set up load path
 
-(add-to-list 'load-path "~/.emacs.d/")
+(add-to-list 'load-path "~/elisp/")
 
 ;; no splash screen
 
@@ -62,7 +62,34 @@
 (global-set-key "\C-xm" 'browse-url-at-point) ; keybinding - go to url at cursor
 (setq w3m-use-cookies t)
 
+;; mc
+(require 'mc)
 
+;; ido
+(require 'ido)
+
+
+;; -------------------------------------------------
+;; Organisation
+;; -------------------------------------------------
+
+; setup org
+(add-to-list 'load-path "~/elisp/org-mode/lisp")
+(require 'org-install)
+(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+
+; define key combinations
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+
+; set org-directory
+
+(setq org-directory "/media/1TB/docs/organisation")
+
+;; capture mode (remember mode)
+
+(setq org-defaults-notes-file (concat org-directory "/notes.org"))
+(define-key global-map "\C-cc" 'org-capture)
 
 ;; -------------------------------------------------
 ;; Programming languages
@@ -126,6 +153,25 @@
 (require 'python-pylint)
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace) ; delete trailing space - pep8
+
+
+;; LISP
+
+; slime
+(add-to-list 'load-path "~/elisp/slime/")
+(setq slime-backend "~/elisp/slime/swank-loader.lisp")
+(require 'slime)
+(add-hook 'lisp-mode-ook (lambda() (slime-mode t)))
+(add-hook 'inferior-lisp-mode-hook (lambda() (inferior-slime-mode t)))
+; set lisp program as sbcl
+(setq inferior-lisp-program "sbcl")
+
+(add-to-list 'auto-mode-alist '("\\.lisp$" . lisp-mode))
+(add-to-list 'auto-mode-alist '("\\.cl$" . lisp-mode))
+(add-to-list 'auto-mode-alist '("\\.asd$" . lisp-mode))
+
+(slime-setup '(slime-fancy))
+
 
 
 ;; --------------------------------------------------
