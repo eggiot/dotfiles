@@ -84,7 +84,7 @@
 
 ; set org-directory
 
-(setq org-directory "/media/1TB/docs/organisation")
+(setq org-directory "~/org")
 
 ;; capture mode (remember mode)
 
