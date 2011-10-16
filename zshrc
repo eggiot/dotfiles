@@ -121,7 +121,7 @@ alias scrot="scrot -q 100"
 alias git-init="git init-db"
 alias git-commit="git commit -a"
 alias git-add-all="git add -A"
-alias gcm="git commit -m"
+alias gcm="git commit -a -m"
 
 # register specific applications for suffixes
 alias -s png=feh
