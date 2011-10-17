@@ -194,12 +194,14 @@
   (progn
     (require 'color-theme)
     (setq favorite-color-themes
-          '((color-theme-gray30)
-            (color-theme-hober)
-            (color-theme-midnight)
-            (color-theme-parus)
-            (color-theme-sataram-solaris)
-            (color-theme-taming-mr-arneson)))
+          '((color-theme-jedit-grey)
+	    ;(color-theme-gray30)
+            ;(color-theme-hober)
+            ;(color-theme-midnight)
+            ;(color-theme-parus)
+            ;(color-theme-sitaram-solaris)
+            ;(color-theme-taming-mr-arneson)
+	    ))
     (random t)                          ;set the seed according to the
                                         ;system clock
     (setq current-color-theme
