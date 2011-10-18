@@ -1,0 +1,25 @@
+" No compatibility - necessary for mappings to work
+set nocompatible
+
+" Status line
+set laststatus=0
+set cmdheight=1
+set nomodifiable " Only in version 6.0
+set readonly
+
+" Dark background
+set background=dark
+
+" Turn syntax on
+syntax enable
+
+" No menu bar and tool bar
+set guioptions=aiMr
+
+" Key bindings
+nmap b <C-B><C-G>
+nmap q :q!<CR>
+nmap <UP> <C-Y>
+nmap <DOWN> <C-E>
+
+nmap ^V <C-F><C-G>

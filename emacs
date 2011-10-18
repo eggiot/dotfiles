@@ -45,6 +45,70 @@
 (auto-compression-mode t)
 
 
+;; --------------------------------------------------
+;; Display
+;; --------------------------------------------------
+
+;;; COLOURS
+
+;; load color-theme and choose one of my favorites at random, but only
+;; if the emacs is a windowed variety
+
+(require 'color-theme)
+(color-theme-initialize)
+
+(defvar current-color-theme
+  "the current color-theme")            ;so I can tell current theme
+
+(if (not window-system)
+    nil
+  (progn
+    (require 'color-theme)
+    (setq favorite-color-themes
+          '((color-theme-jedit-grey)
+	    ;(color-theme-gray30)
+            ;(color-theme-hober)
+            ;(color-theme-midnight)
+            ;(color-theme-parus)
+            ;(color-theme-sitaram-solaris)
+            ;(color-theme-taming-mr-arneson)
+	    ))
+    (random t)                          ;set the seed according to the
+                                        ;system clock
+    (setq current-color-theme
+          (nth (random (length favorite-color-themes))
+               favorite-color-themes))
+    (eval current-color-theme)))
+
+
+;;; UI
+
+;; maximised window on startup
+(require 'maxframe)
+(add-hook 'window-setup-hook 'maximize-frame t)
+
+;; remove scrollbar
+(scroll-bar-mode -1)
+
+;; remove toolbar
+(tool-bar-mode -1)
+
+
+;; font
+(set-default-font "-microsoft-Consolas-normal-normal-normal-*-16-*-*-*-m-9-iso10646-1")
+
+;; fullscreen
+(defun toggle-fullscreen (&optional f)
+  (interactive)
+  (let ((current-value (frame-parameter nil 'fullscreen)))
+       (set-frame-parameter nil 'fullscreen
+                            (if (equal 'fullboth current-value)
+                                (if (boundp 'old-fullscreen) old-fullscreen nil)
+                                (progn (setq old-fullscreen current-value)
+                                       'fullboth)))))
+
+(global-set-key [f11] 'toggle-fullscreen)
+
 
 ;; --------------------------------------------------
 ;; Modes
@@ -171,53 +235,3 @@
 (add-to-list 'auto-mode-alist '("\\.asd$" . lisp-mode))
 
 (slime-setup '(slime-fancy))
-
-
-
-;; --------------------------------------------------
-;; Display
-;; --------------------------------------------------
-
-;;; COLOURS
-
-;; load color-theme and choose one of my favorites at random, but only
-;; if the emacs is a windowed variety
-
-(require 'color-theme)
-(color-theme-initialize)
-
-(defvar current-color-theme
-  "the current color-theme")            ;so I can tell current theme
-
-(if (not window-system)
-    nil
-  (progn
-    (require 'color-theme)
-    (setq favorite-color-themes
-          '((color-theme-jedit-grey)
-	    ;(color-theme-gray30)
-            ;(color-theme-hober)
-            ;(color-theme-midnight)
-            ;(color-theme-parus)
-            ;(color-theme-sitaram-solaris)
-            ;(color-theme-taming-mr-arneson)
-	    ))
-    (random t)                          ;set the seed according to the
-                                        ;system clock
-    (setq current-color-theme
-          (nth (random (length favorite-color-themes))
-               favorite-color-themes))
-    (eval current-color-theme)))
-
-
-;;; UI
-
-;; remove scrollbar
-(scroll-bar-mode -1)
-
-;; remove toolbar
-(tool-bar-mode -1)
-
-
-;; font
-(set-default-font "-microsoft-Consolas-normal-normal-normal-*-16-*-*-*-m-9-iso10646-1")

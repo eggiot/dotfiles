@@ -45,3 +45,7 @@ wget https://raw.github.com/gist/302848/60961ad1134e7bec5d836857fb67109245548dad
 ## mc
 
 wget http://www.emacswiki.org/emacs-fr/download/mc.el
+
+## maxframe
+
+wget https://github.com/rmm5t/maxframe.el/raw/master/maxframe.el

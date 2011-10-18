@@ -108,7 +108,8 @@ fi
 alias rmr="rm -R"
 
 # functionality changes
-alias less="most"
+#alias less="most"
+alias less="vim -u ~/.vimrc.pager"
 alias emacs="emacs -nw"
 
 # media
