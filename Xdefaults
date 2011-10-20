@@ -1,0 +1,6 @@
+! Emacs
+Emacs*Font: Consolas-16:antialias=True
+emacs.FontBackend: xft
+Emacs.toolBar: False
+Emacs.mode-line.attributeForeground: white
+Emacs.mode-line.attributeBackground: #37608A
