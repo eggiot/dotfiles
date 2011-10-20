@@ -54,38 +54,38 @@
 ;; load color-theme and choose one of my favorites at random, but only
 ;; if the emacs is a windowed variety
 
-(require 'color-theme)
-(color-theme-initialize)
+;(require 'color-theme)
+;(color-theme-initialize)
 
-(defvar current-color-theme
-  "the current color-theme")            ;so I can tell current theme
+;(defvar current-color-theme
+;  "the current color-theme")            ;so I can tell current theme
 
-(if (not window-system)
-    nil
-  (progn
-    (require 'color-theme)
-    (setq favorite-color-themes
-          '((color-theme-jedit-grey)
-	    ;(color-theme-gray30)
-            ;(color-theme-hober)
-            ;(color-theme-midnight)
-            ;(color-theme-parus)
-            ;(color-theme-sitaram-solaris)
-            ;(color-theme-taming-mr-arneson)
-	    ))
-    (random t)                          ;set the seed according to the
-                                        ;system clock
-    (setq current-color-theme
-          (nth (random (length favorite-color-themes))
-               favorite-color-themes))
-    (eval current-color-theme)))
+;(if (not window-system)
+;    nil
+;  (progn
+;    (require 'color-theme)
+;    (setq favorite-color-themes
+;          '((color-theme-jedit-grey)
+;	    ;(color-theme-gray30)
+;            ;(color-theme-hober)
+;            ;(color-theme-midnight)
+;            ;(color-theme-parus)
+;            ;(color-theme-sitaram-solaris)
+;            ;(color-theme-taming-mr-arneson)
+;	    ))
+;    (random t)                          ;set the seed according to the
+;                                        ;system clock
+;    (setq current-color-theme
+;          (nth (random (length favorite-color-themes))
+;               favorite-color-themes))
+;    (eval current-color-theme)))
 
 
 ;;; UI
 
 ;; maximised window on startup
-(require 'maxframe)
-(add-hook 'window-setup-hook 'maximize-frame t)
+;(require 'maxframe)
+;(add-hook 'window-setup-hook 'maximize-frame t)
 
 ;; remove scrollbar
 (scroll-bar-mode -1)
@@ -162,10 +162,10 @@
 ;; General
 
 ; parenthesis matching
-(autoload 'autopair-global-mode "autopair" nil t)
-(autopair-global-mode)
-(add-hook 'lisp-mode-hook
-	  #'(lambda () (setq autopair-dont-activate t))) ;except lisp - paredit
+;(autoload 'autopair-global-mode "autopair" nil t)
+;(autopair-global-mode)
+;(add-hook 'lisp-mode-hook
+;	  #'(lambda () (setq autopair-dont-activate t))) ;except lisp - paredit
 
 ; change comint keys
 (require 'comint)
@@ -175,7 +175,10 @@
 (define-key comint-mode-map [up] 'comint-previous-matching-input-from-input)
 
 ; autocomplete
-(require 'anything)
+(add-to-list 'load-path "~/elisp/auto-complete")
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/elisp/auto-complete/ac-dict")
+(ac-config-default)
 
 ; autoindentation
 (dolist (command '(yank yank-pop))
@@ -235,3 +238,16 @@
 (add-to-list 'auto-mode-alist '("\\.asd$" . lisp-mode))
 
 (slime-setup '(slime-fancy))
+
+
+
+;; ELISP
+
+; emacs development path
+(add-to-list 'load-path "~/elisp-dev")
+
+; dev modes
+(require 'inform7)
+(add-to-list 'auto-mode-alist '("\\.ni\\'" . inform7))
+
+
