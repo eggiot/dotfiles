@@ -20,7 +20,7 @@
 ;; General Setup
 ;; --------------------------------------------------
 
-;; first, avoid the evil
+;; when in xemacs
 (when (featurep 'xemacs)
   (error "This machine runs xemacs, install GNU Emacs first."))
 
@@ -63,7 +63,8 @@
 (require 'color-theme)
 (color-theme-initialize)
 ;(color-theme-jedit-grey)
-(color-theme-xemacs)
+;(color-theme-xemacs)
+(color-theme-goldenrod)
 
 ;;; UI
 
@@ -79,7 +80,7 @@
 ;; cursor
 (require 'bar-cursor)
 (bar-cursor-mode 1)
-(global-hl-line-mode t)
+;(global-hl-line-mode t)
 (set-cursor-color "black")
 
 ;; fullscreen
