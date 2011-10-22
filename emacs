@@ -117,8 +117,6 @@
 
 (load-file "~/elisp/cedet/common/cedet.el")
 (global-ede-mode 1)
-(semantic-load-enable-code-helpers)
-(global-srecode-minor-mode 1)
 
 
 ;; --------------------------------------------------
@@ -150,10 +148,8 @@
 ;; General
 
 ; parenthesis matching
-;(autoload 'autopair-global-mode "autopair" nil t)
-;(autopair-global-mode)
-;(add-hook 'lisp-mode-hook
-;	  #'(lambda () (setq autopair-dont-activate t))) ;except lisp - paredit
+(autoload 'autopair-global-mode "autopair" nil t)
+(autopair-global-mode)
 
 ; change comint keys
 (require 'comint)
@@ -163,10 +159,10 @@
 (define-key comint-mode-map [up] 'comint-previous-matching-input-from-input)
 
 ; autocomplete
-;(add-to-list 'load-path "~/elisp/auto-complete")
-;(require 'auto-complete-config)
-;(add-to-list 'ac-dictionary-directories "~/elisp/auto-complete/ac-dict")
-;(ac-config-default)
+(add-to-list 'load-path "~/elisp/auto-complete")
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/elisp/auto-complete/ac-dict")
+(ac-config-default)
 
 ; autoindentation
 ;(dolist (command '(yank yank-pop))
@@ -210,6 +206,16 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace) ; delete trailing space - pep8
 
 
+;; C++
+
+(add-hook 'c++-mode-hook '(lambda ()
+			    (add-to-list 'ac-omni-completion-sources
+					 (cons "\\." '(ac-source-semantic)))
+			    (add-to-list 'ac-omni-completion-sources
+					 (cons "->" '(ac-source-semantic)))
+			    (setq ac-sources '(ac-source-semantic ac-source-yasnippet))))
+
+
 ;; LISP
 
 ; slime
@@ -226,6 +232,40 @@
 (add-to-list 'auto-mode-alist '("\\.asd$" . lisp-mode))
 
 (slime-setup '(slime-fancy))
+
+;; Paredit - all forms of lisp should use this rather than autopair
+
+; disable autopair - possibly overkill
+
+(set-default 'autopair-dont-activate #'(lambda () (eq major-mode 'sldb-mode)))
+;(set-default 'autopair-dont-activate #'(lambda () (eq major-mode 'lisp-mode)))
+;(set-default 'autopair-dont-activate #'(lambda () (eq major-mode 'lisp-interaction-mode)))
+(set-default 'autopair-dont-activate #'(lambda () (eq major-mode 'emacs-lisp-mode)))
+(set-default 'autopair-dont-activate #'(lambda () (eq major-mode 'scheme-mode)))
+(set-default 'autopair-dont-activate #'(lambda () (eq major-mode 'slime-mode)))
+;(set-default 'autopair-dont-activate #'(lambda () (eq major-mode 'slime)))
+(set-default 'autopair-dont-activate #'(lambda () (eq major-mode 'slime-repl-mode)))
+
+; enable paredit - also, possibly overkill
+
+(autoload 'paredit-mode "paredit" t)
+(add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
+;(add-hook 'lisp-mode-hook (lambda () (paredit-mode +1)))
+;(add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode +1)))
+;(add-hook 'scheme-mode-hook (lambda () (paredit-mode +1)))
+;(add-hook 'slbd-mode-hook (lambda() (paredit-mode +1)))
+(add-hook 'slime-mode-hook (lambda() (paredit-mode +1)))
+;(add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
+
+; stop slime's repl from grabbing DEL
+; which is annying when backspacing over a '('
+(defun override-slime-repl-bindings-with-paredit ()
+  (define-key slime-repl-mode-map
+    (read-kbd-macro paredit-backward-delete-key) nil))
+
+(add-hook 'slime-repl-mode-hook 'override-slime-repl-bindings-with-paredit)
+
+
 
 
 
