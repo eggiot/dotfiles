@@ -1,0 +1,35 @@
+[global_config]
+  enabled_plugins = CustomCommandsMenu, TestPlugin, MavenPluginURLHandler
+  title_transmit_fg_color = "#c4c4c4"
+  title_inactive_fg_color = "#444444"
+  title_receive_bg_color = "#304d62"
+  title_transmit_bg_color = "#4e4e4e"
+  title_receive_fg_color = "#b5b5b5"
+  title_inactive_bg_color = "#adabac"
+[keybindings]
+[profiles]
+  [[default]]
+    palette = "#000000:#b72727:#4e9a06:#bd8b33:#3465a4:#75507b:#238a8b:#d3d7cf:#4c4c4c:#be4141:#8ae234:#e0d684:#729fcf:#c077b8:#75b7b7:#eeeeec"
+    exit_action = hold
+    use_system_font = False
+    cursor_color = "#ff0000"
+    foreground_color = "#bdc4c1"
+    show_titlebar = False
+    font = Consolas 14
+    background_color = "#151515"
+    use_theme_colors = True
+
+    # I like bells
+    audible_bell = True
+    visible_bell = True
+    urgent_bell = True
+    icon_bell = True
+[layouts]
+  [[default]]
+    [[[child1]]]
+      type = Terminal
+      parent = window0
+    [[[window0]]]
+      type = Window
+      parent = ""
+[plugins]
