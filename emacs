@@ -45,6 +45,11 @@
 ;; handle .gz files
 (auto-compression-mode t)
 
+; stop \C-Z from backgrounding / minimising emacs
+(global-set-key "\C-Z" nil)
+
+
+
 
 ;; --------------------------------------------------
 ;; Display
@@ -147,10 +152,6 @@
 
 ;; General
 
-; parenthesis matching
-(autoload 'autopair-global-mode "autopair" nil t)
-(autopair-global-mode)
-
 ; change comint keys
 (require 'comint)
 (define-key comint-mode-map (kbd "M-") 'comint-next-input)
@@ -206,14 +207,19 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace) ; delete trailing space - pep8
 
 
-;; C++
+;; C/C++
 
+; auto-complete
 (add-hook 'c++-mode-hook '(lambda ()
 			    (add-to-list 'ac-omni-completion-sources
 					 (cons "\\." '(ac-source-semantic)))
 			    (add-to-list 'ac-omni-completion-sources
 					 (cons "->" '(ac-source-semantic)))
 			    (setq ac-sources '(ac-source-semantic ac-source-yasnippet))))
+
+; indentation
+(setq c-default-style "bsd"
+      c-basic-offset 4)
 
 
 ;; LISP
@@ -235,27 +241,14 @@
 
 ;; Paredit - all forms of lisp should use this rather than autopair
 
-; disable autopair - possibly overkill
-
-(set-default 'autopair-dont-activate #'(lambda () (eq major-mode 'sldb-mode)))
-;(set-default 'autopair-dont-activate #'(lambda () (eq major-mode 'lisp-mode)))
-;(set-default 'autopair-dont-activate #'(lambda () (eq major-mode 'lisp-interaction-mode)))
-(set-default 'autopair-dont-activate #'(lambda () (eq major-mode 'emacs-lisp-mode)))
-(set-default 'autopair-dont-activate #'(lambda () (eq major-mode 'scheme-mode)))
-(set-default 'autopair-dont-activate #'(lambda () (eq major-mode 'slime-mode)))
-;(set-default 'autopair-dont-activate #'(lambda () (eq major-mode 'slime)))
-(set-default 'autopair-dont-activate #'(lambda () (eq major-mode 'slime-repl-mode)))
-
-; enable paredit - also, possibly overkill
+; enable paredit
 
 (autoload 'paredit-mode "paredit" t)
 (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
-;(add-hook 'lisp-mode-hook (lambda () (paredit-mode +1)))
-;(add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode +1)))
-;(add-hook 'scheme-mode-hook (lambda () (paredit-mode +1)))
-;(add-hook 'slbd-mode-hook (lambda() (paredit-mode +1)))
+(add-hook 'lisp-mode-hook (lambda () (paredit-mode +1)))
+(add-hook 'scheme-mode-hook (lambda () (paredit-mode +1)))
 (add-hook 'slime-mode-hook (lambda() (paredit-mode +1)))
-;(add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
+(add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
 
 ; stop slime's repl from grabbing DEL
 ; which is annying when backspacing over a '('
@@ -264,9 +257,6 @@
     (read-kbd-macro paredit-backward-delete-key) nil))
 
 (add-hook 'slime-repl-mode-hook 'override-slime-repl-bindings-with-paredit)
-
-
-
 
 
 ;; ELISP
