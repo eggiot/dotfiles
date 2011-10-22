@@ -80,6 +80,12 @@ alias pkgsh="aptitude show"
 alias pkgd="aptitude download"
 alias pkgsf="apt-cache-formatted"
 
+alias debinstall="sudo dpkg -i"
+alias debunpack="dpkg --unpack"
+alias debconfigure="dpkg --configure"
+alias debremove="dpkg --remove"
+alias debshow="dpkg-deb --show"
+
 ## directory navigation
 alias desktop="~/Desktop"
 alias "..."="../.."
@@ -87,8 +93,11 @@ alias "...."="../../.."
 alias "....."="../../../../"
 alias 1tb="/media/1TB"
 
+## sudoed commands
+alias semacs="sudo emacs -nw"
+
 # shortened
-alias fp="ps -aux | grep" # find a running process
+alias fp="ps aux | grep" # find a running process
 alias turnoff="sudo shutdown -h now" # shut down the computer
 alias alsa-lmms="pasuspender -- lmms" # start lmms using alsa
 alias ff="ls -a | grep" # find file
@@ -108,8 +117,7 @@ fi
 alias rmr="rm -R"
 
 # functionality changes
-#alias less="most"
-alias less="vim -u ~/.vimrc.pager"
+alias less="most"
 alias emacs="emacs -nw"
 
 # media
@@ -122,7 +130,9 @@ alias scrot="scrot -q 100"
 alias git-init="git init-db"
 alias git-commit="git commit -a"
 alias git-add-all="git add -A"
+
 alias gcm="git commit -a -m"
+alias gra="git remote add"
 
 # register specific applications for suffixes
 alias -s png=feh
@@ -131,6 +141,8 @@ alias -s jpeg=feh
 alias -s html=w3m
 alias -s org=w3m
 alias -s avi=mplayer
+alias -s flac=play
+alias -s wav=play
 
 # networking
 alias ping="ping -c 3"

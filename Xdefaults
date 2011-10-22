@@ -1,6 +1,15 @@
+! ---------------------------------------
+! file: ~/.Xdefaults
+! author: Eliot Walker
+! modified: October 2011
+!----------------------------------------
+
 ! Emacs
-Emacs*Font: Consolas-16:antialias=True
+Emacs*Font: Consolas-15:antialias=True
 emacs.FontBackend: xft
 Emacs.toolBar: False
+Emacs.verticalScrollBars: off
 Emacs.mode-line.attributeForeground: white
 Emacs.mode-line.attributeBackground: #37608A
+Emacs.minibuffer-prompt.attributeForeground: black
+Emacs.minibuffer-prompt.attributeBackground: white

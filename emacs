@@ -1,10 +1,11 @@
 ;; --------------------------------------------------
-;; Emacs configuration
+;; file: ~/.emacs
+;; author: Eliot Walker
+;; modified: October 2011
 ;;
 ;; Requires:
 ;;
 ;;     emacs-goodies.el package
-;;     auto-complete package
 ;;     Python packages:
 ;;         python-mode
 ;;         python-ropemacs
@@ -54,9 +55,10 @@
 ;; load color-theme and choose one of my favorites at random, but only
 ;; if the emacs is a windowed variety
 
-;(require 'color-theme)
-;(color-theme-initialize)
+(require 'color-theme)
+(color-theme-initialize)
 ;(color-theme-jedit-grey)
+(color-theme-xemacs)
 
 ;;; UI
 
@@ -72,6 +74,8 @@
 ;; cursor
 (require 'bar-cursor)
 (bar-cursor-mode 1)
+(global-hl-line-mode t)
+(set-cursor-color "black")
 
 ;; fullscreen
 (defun toggle-fullscreen (&optional f)
@@ -84,7 +88,6 @@
                                        'fullboth)))))
 
 (global-set-key [f11] 'toggle-fullscreen)
-
 
 ;; --------------------------------------------------
 ;; Modes
@@ -108,10 +111,19 @@
 ;; ido
 (require 'ido)
 
+;; --------------------------------------------------
+;; IDE stuff (mainly CEDET)
+;; --------------------------------------------------
 
-;; -------------------------------------------------
+(load-file "~/elisp/cedet/common/cedet.el")
+(global-ede-mode 1)
+(semantic-load-enable-code-helpers)
+(global-srecode-minor-mode 1)
+
+
+;; --------------------------------------------------
 ;; Organisation
-;; -------------------------------------------------
+;; --------------------------------------------------
 
 ; setup org
 (add-to-list 'load-path "~/elisp/org-mode/lisp")
@@ -131,9 +143,9 @@
 (setq org-defaults-notes-file (concat org-directory "/notes.org"))
 (define-key global-map "\C-cc" 'org-capture)
 
-;; -------------------------------------------------
+;; --------------------------------------------------
 ;; Programming languages
-;; -------------------------------------------------
+;; --------------------------------------------------
 
 ;; General
 
@@ -151,19 +163,19 @@
 (define-key comint-mode-map [up] 'comint-previous-matching-input-from-input)
 
 ; autocomplete
-(add-to-list 'load-path "~/elisp/auto-complete")
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/elisp/auto-complete/ac-dict")
-(ac-config-default)
+;(add-to-list 'load-path "~/elisp/auto-complete")
+;(require 'auto-complete-config)
+;(add-to-list 'ac-dictionary-directories "~/elisp/auto-complete/ac-dict")
+;(ac-config-default)
 
 ; autoindentation
-(dolist (command '(yank yank-pop))
-  (eval `(defadvice ,command (after indent-region-activates)
-	   (and (not current-prefix-arg)
-		(member major-mode '(emacs-lisp-mode slime
-				     python-mode     c++-mode))
-		(let ((mark-even-if-inactive transient-mark-mode))
-		  (indent-region (region-beginning) (region-end) nil))))))
+;(dolist (command '(yank yank-pop))
+;  (eval `(defadvice ,command (after indent-region-activates)
+;	   (and (not current-prefix-arg)
+;		(member major-mode '(emacs-lisp-mode slime
+;				     python-mode     c++-mode))
+;		(let ((mark-even-if-inactive transient-mark-mode))
+;		  (indent-region (region-beginning) (region-end) nil))))))
 
 ;; Python
 
