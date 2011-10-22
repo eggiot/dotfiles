@@ -1,69 +1,36 @@
-########################################################
-# .zshrc                                               #
-# by Eliot Walker                                      #
-# November 2008                                        #
-#                                                      #
-# requires aptitude most sox scrot git feh w3m mplayer #
-########################################################
+# Path to your oh-my-zsh configuration.
+ZSH=$HOME/.oh-my-zsh
 
-###########
-# OPTIONS #
-###########
+# Set name of the theme to load.
+# Look in ~/.oh-my-zsh/themes/
+# Optionally, if you set this to "random", it'll load a random theme each
+# time that oh-my-zsh is loaded.
+ZSH_THEME="cloud" #muse
 
-# load zsh modules
+# Set to this to use case-sensitive completion
+# CASE_SENSITIVE="true"
 
-zstyle :compinstall filename '/home/eliot/.zshrc'
-autoload -U compinit promptinit zcalc zsh-mime-setup
-compinit
-promptinit
-zsh-mime-setup
+# Comment this out to disable weekly auto-update checks
+# DISABLE_AUTO_UPDATE="true"
 
-# options
-setopt printexitvalue # alert me if something's failed
-setopt GLOB_COMPLETE
-setopt PUSHD_MINUS
-setopt RM_STAR_WAIT
-setopt ZLE
-setopt NO_BEEP
-setopt NO_CASE_GLOB
-setopt NUMERIC_GLOB_SORT
-setopt EXTENDED_GLOB
-setopt IGNORE_EOF
-setopt MENUCOMPLETE
-setopt ALL_EXPORT
+# Uncomment following line if you want to disable colors in ls
+# DISABLE_LS_COLORS="true"
 
-# keybindings
+# Uncomment following line if you want to disable autosetting terminal title.
+# DISABLE_AUTO_TITLE="true"
 
+# Uncomment following line if you want red dots to be displayed while waiting for completion
+# COMPLETION_WAITING_DOTS="true"
 
-###########
-# HISTORY #
-###########
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Example format: plugins=(rails git textmate ruby lighthouse)
+plugins=(git command-not-found python)
 
-HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
+source $ZSH/oh-my-zsh.sh
 
-setopt EXTENDED_HISTORY # puts timestamp in history
-setopt HIST_VERIFY # when using ! cmds, confirm first
-setopt HIST_IGNORE_DUPS # ignore same command run twice
-setopt APPEND_HISTORY # don't overwrite history
-setopt SHARE_HISTORY # _all_ zsh sessions share the same history
-setopt INC_APPEND_HISTORY # write after each command
+# Customize to your needs...
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
 
-# search history
-autoload -U history-search-end
-zle -N history-beginning-search-backward-end history-search-end
-zle -N history-beginning-search-forward-end history-search-end
-bindkey '^[[A' history-beginning-search-backward-end
-bindkey '^[[B' history-beginning-search-forward-end
-
-setopt autocd extendedglob nomatch
-unsetopt appendhistory beep
-bindkey -e
-
-# PROMPT
-#PROMPT='%n@%M:%~$ ' # default prompt
-prompt bart
 
 ##############
 # MY ALIASES #
@@ -72,7 +39,8 @@ prompt bart
 alias pkg="aptitude"
 alias spkg="sudo aptitude"
 alias spkgi="sudo aptitude -P install"
-alias spkgu="sudo aptitude update && sudo aptitude -P safe-upgrade"
+alias spkgu="sudo aptitude update; sudo aptitude safe-upgrade"
+alias spkgsu="sudo aptitude safe-upgrade"
 alias spkgr="sudo aptitude -P remove"
 alias spkgc="sudo aptitude clean"
 alias pkgs="aptitude search"
@@ -93,8 +61,9 @@ alias "...."="../../.."
 alias "....."="../../../../"
 alias 1tb="/media/1TB"
 
-## sudoed commands
+# sudoed commands
 alias semacs="sudo emacs -nw"
+alias sgedit="gksudo gedit"
 
 # shortened
 alias fp="ps aux | grep" # find a running process
@@ -102,6 +71,15 @@ alias turnoff="sudo shutdown -h now" # shut down the computer
 alias alsa-lmms="pasuspender -- lmms" # start lmms using alsa
 alias ff="ls -a | grep" # find file
 alias set-menu-button-layout="gconftool-2 --set /apps/metacity/general/button_layout --type string"
+
+# configuration
+alias xorgconf="sudo emacs -nw /etc/X11/xorg.conf" # X server configuration
+
+# fresh install
+alias installprogramming="sudo aptitude install sbcl slime ipython python-numpy python-scipy codeblocks virtualbox-ose"
+alias installoffice="sudo aptitude install fbreader lyx"
+alias installmedia="sudo aptitude install vlc blender gimp xfburn audacity feh mplayer scrot jackd"
+alias installnetworking="sudo aptitude install w3m chromium-browser"
 
 # functionality additions
 alias lsd="ls -ld *(-/DN)" # list only directories and symlinks to directories
@@ -118,6 +96,7 @@ alias rmr="rm -R"
 
 # functionality changes
 alias less="most"
+#alias less="vim -u ~/.vimrc.pager -"
 alias emacs="emacs -nw"
 
 # media
@@ -126,11 +105,7 @@ alias brownnoise="play -n synth brownnoise"
 alias whitenoise="play -n synth whitenoise"
 alias scrot="scrot -q 100"
 
-## git
-alias git-init="git init-db"
-alias git-commit="git commit -a"
-alias git-add-all="git add -A"
-
+# git
 alias gcm="git commit -a -m"
 alias gra="git remote add"
 
@@ -174,76 +149,14 @@ extract () {
      fi
 }
 
-##############
-# Completion #
-##############
+# search a man page for a pattern
+manfind() {
+    man $1 | grep $2
+}
 
-setopt CORRECT			# command CORRECTION
+# wipe hard drive
 
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path ~/.zsh/cache
-
-# Fuzzy matching of completions for when you mistype them
-zstyle ':completion:*' completer _complete _match _approximate
-zstyle ':completion:*:match:*' original only
-zstyle ':completion:*:approximate:*' max-errors 1 numeric
-
-# Prevent CVS files/directories from being completed
-zstyle ':completion:*:(all-|)files' ignored-patterns '(|*/)CVS'
-zstyle ':completion:*:cd:*' ignored-patterns '(*/)#CVS'
-
-# allow one error for every three characters typed in approximate completer
-zstyle -e ':completion:*:approximate:*' max-errors \
-    'reply=( $(( ($#PREFIX+$#SUFFIX)/2 )) numeric )'
-
-alias mv='nocorrect mv'       # no spelling correction on mv
-alias cp='nocorrect cp'
-alias mkdir='nocorrect mkdir'
-
-# ignore completion functions (until the _ignored completer)
-zstyle ':completion:*:functions' ignored-patterns '_*'
-zstyle ':completion:*:*:*:users' ignored-patterns \
-        adm apache bin daemon games gdm halt ident junkbust lp mail mailnull \
-        named news nfsnobody nobody nscd ntp operator pcap postgres radvd \
-        rpc rpcuser rpm shutdown squid sshd sync uucp vcsa xfs avahi-autoipd\
-        avahi backup messagebus beagleindex debian-tor dhcp dnsmasq fetchmail\
-        firebird gnats haldaemon hplip irc klog list man cupsys postfix\
-        proxy syslog www-data mldonkey sys snort
-
-## add colors to processes for kill completion
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-
-zstyle ':completion:*:*:kill:*:processes' command 'ps --forest -A -o pid,user,cmd'
-zstyle ':completion:*:processes-names' command 'ps axho command'
-
-zstyle ':completion:*:*:killall:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-zstyle ':completion:*:*:killall:*:processes' command 'ps --forest -A -o pid,user,cmd'
-
-# match uppercase from lowercase
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}'
-
-
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*' list-prompt '%SAt %p: Hit TAB for more, or the character to insert%s'
-zstyle ':completion:*' menu select=1 _complete _ignored _approximate
-
-zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
-
-# Completion Styles
-
-# list of completers to use
-#zstyle ':completion:*::::' completer _expand _complete _ignored _approximate
-
-# insert all expansions for expand completer
-zstyle ':completion:*:expand:*' tag-order all-expansions
-
-# formatting and messages
-zstyle ':completion:*' verbose yes
-zstyle ':completion:*:descriptions' format '%B%d%b'
-zstyle ':completion:*:messages' format '%d'
-zstyle ':completion:*:warnings' format 'No matches for: %d'
-zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
-zstyle ':completion:*' group-name ''
-
-# offer indexes before parameters in subscripts
-zstyle ':completion:*:*:-subscript-:*' tag-order indexes parameters
+security_wipe_hd () {
+    # overwrite a drive with random data 7 times - for sensitive data
+    for n in `seq 7`; do dd if=/dev/urandom of=$1 bs=8b conv=notrunc; done
+}
