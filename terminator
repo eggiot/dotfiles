@@ -9,21 +9,24 @@
 [keybindings]
 [profiles]
   [[default]]
-    palette = "#000000:#b72727:#4e9a06:#bd8b33:#3465a4:#75507b:#238a8b:#d3d7cf:#4c4c4c:#be4141:#8ae234:#e0d684:#729fcf:#c077b8:#75b7b7:#eeeeec"
+    palette = "#000000:#cc0000:#4e9a06:#c4a000:#3465a4:#75507b:#06989a:#d3d7cf:#555753:#ef2929:#8ae234:#fce94f:#729fcf:#ad7fa8:#34e2e2:#eeeeec"
     exit_action = hold
-    use_system_font = False
-    cursor_color = "#ff0000"
-    foreground_color = "#bdc4c1"
-    show_titlebar = False
-    font = Consolas 14
-    background_color = "#151515"
-    use_theme_colors = True
-
-    # I like bells
-    audible_bell = True
     visible_bell = True
     urgent_bell = True
-    icon_bell = True
+    cursor_shape = ibeam
+    use_system_font = False
+    cursor_color = "#ff0000"
+    foreground_color = "#ceb795"
+    show_titlebar = False
+    font = Consolas 14
+    audible_bell = True
+  [[transparent]]
+    background_type = transparent
+    foreground_color = "#ffffff"
+    cursor_shape = ibeam
+    cursor_color = "#ff0000"
+    use_system_font = False
+    font = Consolas 14
 [layouts]
   [[default]]
     [[[child1]]]

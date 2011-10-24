@@ -5,10 +5,10 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="cloud" #muse
+ZSH_THEME="edvardm" #muse
 
 # Set to this to use case-sensitive completion
-# CASE_SENSITIVE="true"
+CASE_SENSITIVE="true"
 
 # Comment this out to disable weekly auto-update checks
 # DISABLE_AUTO_UPDATE="true"
@@ -30,6 +30,18 @@ source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+
+############
+# MY SETUP #
+############
+if ! [ $TERM ] ; then
+    eval `tset -s -Q`
+    case $TERM in
+      con*|vt100) tset -Q -e ^?
+        ;;
+    esac
+fi
+
 
 
 ##############
@@ -160,3 +172,6 @@ security_wipe_hd () {
     # overwrite a drive with random data 7 times - for sensitive data
     for n in `seq 7`; do dd if=/dev/urandom of=$1 bs=8b conv=notrunc; done
 }
+
+# 256 colours
+#export TERM=xterm-256color
