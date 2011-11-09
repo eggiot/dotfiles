@@ -78,7 +78,7 @@ alias semacs="sudo emacs -nw"
 alias sgedit="gksudo gedit"
 
 # shortened
-alias fp="ps aux | grep" # find a running process
+fp() {ps ax -o pid,command | grep $1 | sed G} # find a running process
 alias turnoff="sudo shutdown -h now" # shut down the computer
 alias alsa-lmms="pasuspender -- lmms" # start lmms using alsa
 alias ff="ls -a | grep" # find file
@@ -105,6 +105,8 @@ if [ "$TERM" != "dumb" ]; then
 fi
 
 alias rmr="rm -R"
+
+rfind() {find -ls | grep $1 | sed "s/^.* //"}
 
 # functionality changes
 alias less="most"
@@ -134,7 +136,9 @@ alias -s wav=play
 # networking
 alias ping="ping -c 3"
 
-## complicated alias functions
+# programming
+
+syscall() {w3m -no-graph ~/.linux-syscall.html | grep $1 | sed 's/|//g'}
 
 # create directory and enter it
 mdc() {mkdir -p "$1" && cd "$1"}
@@ -173,5 +177,13 @@ security_wipe_hd () {
     for n in `seq 7`; do dd if=/dev/urandom of=$1 bs=8b conv=notrunc; done
 }
 
+make-password () {
+    cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w $1 | head -n 1
+}
+
+# create a playlist / create sorted list of files
+make-sorted-file-list () {
+    find -maxdepth 1 -type f -iname \*$1 | sort > $2
+}
 # 256 colours
 #export TERM=xterm-256color

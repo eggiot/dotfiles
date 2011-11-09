@@ -15,17 +15,18 @@
     urgent_bell = True
     cursor_shape = ibeam
     use_system_font = False
-    cursor_color = "#ff0000"
-    foreground_color = "#ceb795"
+    cursor_color = "#ffffff"
+    foreground_color = "#ffd4ac"
     show_titlebar = False
-    font = Consolas 14
+    font = Consolas 16
+    background_color = "#1a1a1a"
     audible_bell = True
   [[transparent]]
+    use_system_font = False
     background_type = transparent
-    foreground_color = "#ffffff"
     cursor_shape = ibeam
     cursor_color = "#ff0000"
-    use_system_font = False
+    foreground_color = "#ffffff"
     font = Consolas 14
 [layouts]
   [[default]]
