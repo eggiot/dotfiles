@@ -65,6 +65,7 @@ alias debunpack="dpkg --unpack"
 alias debconfigure="dpkg --configure"
 alias debremove="dpkg --remove"
 alias debshow="dpkg-deb --show"
+alias debrmlock="sudo rm /var/lib/dpkg/lock; sudo dpkg --configure -a"
 
 ## directory navigation
 alias desktop="~/Desktop"
@@ -78,7 +79,7 @@ alias semacs="sudo emacs -nw"
 alias sgedit="gksudo gedit"
 
 # shortened
-fp() {ps ax -o pid,command | grep $1 | sed G} # find a running process
+fp() {ps ax -o pid,command | grep $1 | sed -e "/[0-9] grep $1/d" -e "/[0-9] sed /d" | sed G} # find a running process
 alias turnoff="sudo shutdown -h now" # shut down the computer
 alias alsa-lmms="pasuspender -- lmms" # start lmms using alsa
 alias ff="ls -a | grep" # find file
@@ -135,6 +136,7 @@ alias -s wav=play
 
 # networking
 alias ping="ping -c 3"
+alias aweb='wget --quiet --page-requisites --convert-links'
 
 # programming
 

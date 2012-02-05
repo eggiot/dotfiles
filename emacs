@@ -53,11 +53,14 @@ current frame"
 
 ;; load color-theme
 (require 'color-theme)
+;(require 'minimalist-theme)
 (color-theme-initialize)
+(setq color-theme-is-global nil)
 
 (if (not window-system)
     nil
-  (color-theme-taylor))
+  (color-theme-taylor)
+)
 
 ;;; UI
 
@@ -82,7 +85,7 @@ current frame"
                             (if (equal 'fullboth current-value)
                                 (if (boundp 'old-fullscreen) old-fullscreen nil)
                                 (progn (setq old-fullscreen current-value)
-                                       'fullboth)))))
+				       'fullboth)))))
 
 (global-set-key [f11] 'toggle-fullscreen)
 
@@ -92,7 +95,9 @@ current frame"
 
 ;; Default mode - text mode and auto-fill
 (setq default-major-mode 'text-mode)
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
+(add-hook 'text-mode-hook 'visual-line-mode)
+;(add-hook 'text-mode-hook 'turn-on-auto-fill)
+;(setq default-major-mode 'outline-mode)
 
 ;; w3m
 (setq browse-url-browser-function 'w3m-browse-url)
@@ -102,6 +107,32 @@ current frame"
 
 ;; ido
 (require 'ido)
+
+;;; Distraction-free writing in markdown mode
+;; hide modeline
+(require 'hide-mode-line)
+;; sentence detection
+(require 'sentence-highlight)
+;(require 'emacsroom)
+
+(defun distraction-free ()
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  ;(toggle-fullscreen)
+					;(setq right-margin-width 100)
+					;(setq left-margin-width 10)
+					;(setq mode-line-format nil)
+  (load-theme 'minimalist)
+  (set-face-attribute 'default nil :font "Adobe Caslon Pro-19"))
+  ;(sentence-highlight-mode)
+  ;(hide-mode-line)
+
+(add-hook 'markdown-mode-hook 'distraction-free)
+(add-hook 'markdown-mode-hook 'sentence-highlight-mode)
+(add-hook 'markdown-mode-hook 'hide-mode-line)
+(cons '("\\.mdt" . markdown-mode) auto-mode-alist)
+;(require 'emacsroom)
 
 ;; --------------------------------------------------
 ;; Organisation
