@@ -1,0 +1,10 @@
+! Make the right alt key say that it is a Super / Meta key
+keycode 108 = Super_R Meta_R Super_R Meta_R Super_R Meta_R
+
+! Add those codes to the correct modifiers
+add mod1 = Meta_R
+add mod4 = Super_R
+
+! remove them from the default mod lists
+remove mod1 = Super_R
+remove mod1 = Alt_R
