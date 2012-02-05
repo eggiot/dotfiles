@@ -18,20 +18,11 @@
 ;; no splash screen
 (setq inhibit-splash-screen t)
 
-;; get a list of recent files when I start
-(recentf-mode 1)
-(setq recentf-max-menu-items 25)
-(recentf-open-files)
-
 ;; make scripts executabe on save
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 
-;; handle .gz files
-(auto-compression-mode t)
-
 ;; stop \C-Z from backgrounding / minimising emacs
 (global-set-key "\C-Z" nil)
-
 
 ;; --------------------------------------------------
 ;; Display
@@ -51,16 +42,18 @@ current frame"
 
 ;;; Colours
 
-;; load color-theme
-(require 'color-theme)
-;(require 'minimalist-theme)
-(color-theme-initialize)
-(setq color-theme-is-global nil)
+(load-theme 'zenburn)
 
-(if (not window-system)
-    nil
-  (color-theme-taylor)
-)
+;; load color-theme
+;(require 'color-theme)
+;(require 'minimalist-theme)
+;(color-theme-initialize)
+;(setq color-theme-is-global nil)
+
+;(if (not window-system)
+;    nil
+;  (color-theme-taylor)
+;)
 
 ;;; UI
 
@@ -93,66 +86,28 @@ current frame"
 ;; Modes
 ;; --------------------------------------------------
 
-;; Default mode - text mode and auto-fill
+;;; Default mode - text mode and auto-fill
 (setq default-major-mode 'text-mode)
 (add-hook 'text-mode-hook 'visual-line-mode)
-;(add-hook 'text-mode-hook 'turn-on-auto-fill)
-;(setq default-major-mode 'outline-mode)
-
-;; w3m
-(setq browse-url-browser-function 'w3m-browse-url)
-(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
-(global-set-key "\C-xm" 'browse-url-at-point) ; keybinding - go to url at cursor
-(setq w3m-use-cookies t)
-
-;; ido
-(require 'ido)
 
 ;;; Distraction-free writing in markdown mode
 ;; hide modeline
 (require 'hide-mode-line)
 ;; sentence detection
 (require 'sentence-highlight)
-;(require 'emacsroom)
 
 (defun distraction-free ()
   (menu-bar-mode -1)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
-  ;(toggle-fullscreen)
-					;(setq right-margin-width 100)
-					;(setq left-margin-width 10)
-					;(setq mode-line-format nil)
+  (toggle-fullscreen)
   (load-theme 'minimalist)
   (set-face-attribute 'default nil :font "Adobe Caslon Pro-19"))
-  ;(sentence-highlight-mode)
-  ;(hide-mode-line)
 
 (add-hook 'markdown-mode-hook 'distraction-free)
 (add-hook 'markdown-mode-hook 'sentence-highlight-mode)
 (add-hook 'markdown-mode-hook 'hide-mode-line)
-(cons '("\\.mdt" . markdown-mode) auto-mode-alist)
-;(require 'emacsroom)
-
-;; --------------------------------------------------
-;; Organisation
-;; --------------------------------------------------
-
-;; setup org
-(add-to-list 'load-path "~/elisp/org-mode/lisp")
-(require 'org-install)
-(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-
-;; define key combinations
-(define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
-
-;; set org-directory
-(setq org-directory "~/org")
-
-;; capture mode (remember mode)
-(setq org-defaults-notes-file (concat org-directory "/notes.org"))
-(define-key global-map "\C-cc" 'org-capture)
+(cons '("\\.markdown" . markdown-mode) auto-mode-alist)
 
 ;; --------------------------------------------------
 ;; Programming languages
@@ -177,52 +132,6 @@ current frame"
 (defun set-newline-and-indent ()
   (local-set-key (kbd "RET") 'newline-and-indent))
 (add-hook 'lisp-mode-hook 'set-newline-and-indent)
-
-;; project management
-(global-ede-mode 1)
-
-;;; Python
-
-;; setup
-(require 'python-mode)
-(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-
-;; ipython
-(setq ipython-command "/usr/bin/ipython")
-(require 'ipython)
-
-;; pretty lambda symbol instead of the word lambda
-(require 'lambda-mode)
-(add-hook 'python-mode-hook #'lambda-mode 1)
-
-;; code completion with anything
-(require 'anything-ipython)
-(when (require 'anything-show-completion nil t)
-  (use-anything-show-completion 'anything-ipython-complete
-				'(length initial-pattern)))
-
-;; pep8 and pylint
-(require 'python-pep8)
-(require 'python-pylint)
-
-; delete trailing whitespace - necessary for pep8
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-
-;;; C/C++
-
-;; auto-complete
-(add-hook 'c++-mode-hook '(lambda ()
-			    (add-to-list 'ac-omni-completion-sources
-					 (cons "\\." '(ac-source-semantic)))
-			    (add-to-list 'ac-omni-completion-sources
-					 (cons "->" '(ac-source-semantic)))
-			    (setq ac-sources '(ac-source-semantic ac-source-yasnippet))))
-
-;; indentation
-(setq c-default-style "bsd"
-      c-basic-offset 4)
-
 
 ;;; LISP
 
@@ -258,13 +167,3 @@ current frame"
     (read-kbd-macro paredit-backward-delete-key) nil))
 
 (add-hook 'slime-repl-mode-hook 'override-slime-repl-bindings-with-paredit)
-
-
-;;; ELISP
-
-;; emacs development path
-(add-to-list 'load-path "~/elisp-dev")
-
-;; my modes
-(require 'inform7)
-(add-to-list 'auto-mode-alist '("\\.ni\\'" . inform7))
