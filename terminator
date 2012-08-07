@@ -18,7 +18,7 @@
     cursor_color = "#ffffff"
     foreground_color = "#ffd4ac"
     show_titlebar = False
-    font = Crisp 16
+    font = Courier New 16
     background_color = "#1a1a1a"
     audible_bell = True
   [[transparent]]

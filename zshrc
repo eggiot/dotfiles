@@ -84,6 +84,7 @@ alias turnoff="sudo shutdown -h now" # shut down the computer
 alias alsa-lmms="pasuspender -- lmms" # start lmms using alsa
 alias ff="ls -a | grep" # find file
 alias set-menu-button-layout="gconftool-2 --set /apps/metacity/general/button_layout --type string"
+alias delete-thumbnails="find ~/.thumbnails -type f -exec rm {} \;"
 
 # configuration
 alias xorgconf="sudo emacs -nw /etc/X11/xorg.conf" # X server configuration
