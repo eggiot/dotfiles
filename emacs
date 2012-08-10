@@ -24,6 +24,12 @@
 ;; stop \C-Z from backgrounding / minimising emacs
 (global-set-key "\C-Z" nil)
 
+;; Custom variables - do not edit by hand
+(custom-set-variables
+ '(haskell-literate-default (quote tex)))
+(custom-set-faces
+)
+
 ;; --------------------------------------------------
 ;; Display
 ;; --------------------------------------------------
@@ -231,30 +237,31 @@ current frame"
 
 ;; Pretty symbols
 
-(defun haskell-unicode ()
-  (interactive)
-  (substitute-patterns-with-unicode
-   (list (cons "\\(<-\\)" 'left-arrow)
-         (cons "\\(->\\)" 'right-arrow)
-         (cons "\\(==\\)" 'identical)
-         (cons "\\(/=\\)" 'not-identical)
-         (cons "\\(()\\)" 'nil)
-         (cons "\\<\\(sqrt\\)\\>" 'square-root)
-         (cons "\\(&&\\)" 'logical-and)
-         (cons "\\(||\\)" 'logical-or)
-         (cons "\\<\\(not\\)\\>" 'logical-neg)
-         (cons "\\(>\\)\\[^=\\]" 'greater-than)
-         (cons "\\(<\\)\\[^=\\]" 'less-than)
-         (cons "\\s \\(>=\\)\\s " 'greater-than-or-equal-to)
-         (cons "\\s \\(<=\\)\\s " 'less-than-or-equal-to)
-         (cons "\\<\\(alpha\\)\\>" 'alpha)
-         (cons "\\<\\(beta\\)\\>" 'beta)
-         (cons "\\<\\(gamma\\)\\>" 'gamma)
-         (cons "\\<\\(delta\\)\\>" 'delta)
-         (cons "\\(''\\)" 'double-prime)
-         (cons "\\('\\)" 'prime)
-         (cons "\\(!!\\)" 'double-exclamation)
-         (cons "\\(\\.\\.\\)" 'horizontal-ellipsis)
-	 (cons "\\s (?\\(\\\\\\)\\s *\\(\\w\\|_\\).*?\\s *->" 'lambda))))
-  
-(add-hook 'haskell-mode 'haskell-unicode)
+(setq haskell-font-lock-symbols t)
+
+;; mmm-mode for literate Haskell
+
+(defun haskell-mmm-mode ()
+  ;; go into mmm minor mode when class is given
+  (make-local-variable 'mmm-global-mode)
+  (setq mmm-global-mode 'true))
+
+(add-hook 'haskell-mode-hook 'haskell-mmm-mode)
+
+(mmm-add-classes
+ '((literate-haskell-bird
+    :submode text-mode
+    :front "^[^>]"
+    :include-front true
+    :back "^>\\|$"
+    )
+   (literate-haskell-latex
+    :submode literate-haskell-mode
+    :front "^\\\\begin{code}"
+    :front-offset (end-of-line 1)
+    :back "^\\\\end{code}"
+    :include-back nil
+    :back-offset (beginning-of-line -1)
+    )))
+
+(setq mmm-submode-decoration-level 0)
