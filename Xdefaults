@@ -4,7 +4,11 @@
 ! modified: October 2011
 !----------------------------------------
 
-! Emacs
+!! Emacs
 Emacs*Font: Consolas-15:antialias=True
 emacs.FontBackend: xft
 Emacs.toolBar: False
+
+!! urxvt
+urxvt*foreground: #f2f2f2
+urxvt*background: #101010

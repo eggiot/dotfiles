@@ -30,6 +30,12 @@
 (custom-set-faces
 )
 
+;; location
+
+(setq calendar-location-name "Solihull, UK")
+(setq calendar-latitude 52.36)
+(setq calendar-longitude -1.79)
+
 ;; --------------------------------------------------
 ;; Display
 ;; --------------------------------------------------
@@ -50,7 +56,9 @@ current frame"
 
 (require 'color-theme)
 (color-theme-initialize)
-(color-theme-snow)
+
+(require 'theme-changer)
+(change-theme 'color-theme-snow 'color-theme-dark-laptop)
 
 ;;; UI
 
