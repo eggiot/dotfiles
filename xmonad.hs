@@ -1,37 +1,38 @@
 import XMonad
 import XMonad.Config.Gnome
 import XMonad.Util.EZConfig(additionalKeysP)
-import XMonad.Actions.CycleWS
 
 -- make xmonad work with unity
 
 unityManageHook = composeAll (
-  [ manageHook gnomeConfig
-  , className =? "Unity-2d-panel" --> doIgnore
+  [
+    manageHook gnomeConfig,
+    className =? "Unity-2d-panel" --> doIgnore
   ])
 
 -- config
 
 myConfig = gnomeConfig
   {
-    manageHook = unityManageHook
-  , modMask = mod4Mask
-  , focusFollowsMouse = False
-  , terminal = myTerminal
+    manageHook = unityManageHook,
+    modMask = mod4Mask,
+    focusFollowsMouse = False,
+    terminal = terminalCmd
   }
 
--- keycodes
+-- key bindings
 
 myKeys = [
     -- system
-    ("M-S-l", spawn "gnome-screensaver-command -l")
-  , ("M-S-e", spawn "gnome-session-quit --logout")
-  , ("M-S-q", spawn "gnome-session-quit --power-off")
+  appKeyBind "M-S-l" "gnome-screensaver-command -l",
+  appKeyBind "M-S-e" "gnome-session-quit --logout",
+  appKeyBind "M-S-q" "gnome-session-quit --power-off",
     
-    -- utilities
-  , ("M-a", spawnScript "dmenu")
-  , ("M-f", spawn myFileManager)
-  , ("M-t", spawn "emacs")
+  -- utilities
+  scriptKeyBind "M-x" "dmenu",
+  appKeyBind "M-f" fileCmd,
+  appKeyBind "M-b" textCmd,
+  appKeyBind "M-u" browserCmd
   ]
 
 -- main
@@ -39,16 +40,23 @@ myKeys = [
 main = do
   xmonad $ myConfig `additionalKeysP` myKeys
 
--- programs
+-- applications
 
-myTerminal = "urxvt -fn xft:Consolas:pixelsize:20:antialias:true:autohinting:true"
-myFileManager = myTerminal ++ " -e mc"
+terminalCmd = "urxvt -fn xft:Consolas:size=16:antialias=true:autohinting=true"
+fileCmd = terminalCmd ++ " -e mc"
+browserCmd = "firefox --app /home/eliot/bin/conkeror/application.ini"
+textCmd = "emacsclient -c"
 
 -- locations
-
-scriptsDir = "~/scripts/"
+scriptDir = "~/scripts/"
 
 -- functions
 
-spawnScript :: MonadIO m => String -> m ()
-spawnScript x = spawn $ (scriptsDir ++ x)
+appKeyBind :: String -> String -> (String, X())
+appKeyBind k s = (k, spawn s)
+
+scriptKeyBind :: String -> String -> (String, X())
+scriptKeyBind k s = appKeyBind k (getScript s)
+
+getScript :: String -> String
+getScript x = scriptDir ++ x

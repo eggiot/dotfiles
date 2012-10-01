@@ -40,30 +40,13 @@
 ;; Display
 ;; --------------------------------------------------
 
-;;; Frame
-;; Set initial size and shape
-(defun set-frame-size-shape (w h x y)
-  "Set the width, height and x/y position of the
-current frame"
-  (let ((frame (selected-frame)))
-    (delete-other-windows)
-    (set-frame-position frame x y)
-    (set-frame-size frame w h)))
-
-(set-frame-size-shape 65 30 0 0)
-
-;;; Colours
-
-(require 'color-theme)
-(color-theme-initialize)
-
-(require 'theme-changer)
-(change-theme 'color-theme-snow 'color-theme-dark-laptop)
-
 ;;; UI
 
-;; set font
-(set-frame-font "-microsoft-Consolas-normal-normal-normal-*-19-*-*-*-m-0-iso10646-1")
+; font
+(setq default-frame-alist '((font . "Everson Mono-16")))
+
+; Colour theme
+(add-hook 'server-visit-hook 'color-theme-snow)
 
 ;; modeline modifications
 ; show the time
@@ -74,7 +57,7 @@ current frame"
 (set-face-italic-p 'modeline t)
 
 ;; no toolbar
-(tool-bar-mode -1)
+(tool-bar-mode 0)
 
 ;; cursor
 (require 'bar-cursor)

@@ -1,0 +1,21 @@
+require("new-tabs.js");
+require("clicks-in-new-buffer.js")
+require("adblockplus.js")
+clicks_in_new_buffer_target = OPEN_NEW_BUFFER_BACKGROUND;
+clicks_in_new_buffer_button = 1;
+
+// autocompletion in minibuffer
+minibuffer_auto_complete_default = true;
+url_completion_use_history = true;
+url_completion_use_bookmarks = true;
+
+// pinboard bookmarks webjump
+define_webjump("pinboard", function (url) {
+    if (url) {
+        return "http://pinboard.in/add?next=same&url=" + url;
+    } else {
+        return "javascript:document.location.href='http://pinboard.in/add?next=same&url='+encodeURIComponent(document.location.href)+'&description='+encodeURIComponent(document.getSelection())+'&title='+encodeURIComponent(document.title);";
+    }
+}, $argument = "optional");
+
+homepage = "about:blank";

@@ -42,6 +42,7 @@ if ! [ $TERM ] ; then
     esac
 fi
 
+export PATH=/home/eliot/bin:$PATH
 
 
 ##############
@@ -120,6 +121,7 @@ alias pinknoise="play -n synth pinknoise"
 alias brownnoise="play -n synth brownnoise"
 alias whitenoise="play -n synth whitenoise"
 alias scrot="scrot -q 100"
+alias groovesalad="mplayer -playlist http://somafm.com/groovesalad.pls"
 
 # git
 alias gcm="git commit -a -m"
