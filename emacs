@@ -24,12 +24,6 @@
 ;; stop \C-Z from backgrounding / minimising emacs
 (global-set-key "\C-Z" nil)
 
-;; Custom variables - do not edit by hand
-(custom-set-variables
- '(haskell-literate-default (quote tex)))
-(custom-set-faces
-)
-
 ;; location
 
 (setq calendar-location-name "Solihull, UK")
@@ -84,25 +78,6 @@
 (add-hook 'text-mode-hook 'visual-line-mode)
 
 (require 'markdown-mode)
-
-;;; Distraction-free writing in markdown mode
-;; hide modeline
-(require 'hide-mode-line)
-;; sentence detection
-(require 'sentence-highlight)
-
-(defun distraction-free ()
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
-  (toggle-fullscreen)
-  (load-theme 'minimalist)
-  (set-face-attribute 'default nil :font "Adobe Caslon Pro-19"))
-
-;(add-hook 'markdown-mode-hook 'distraction-free)
-;(add-hook 'markdown-mode-hook 'sentence-highlight-mode)
-;(add-hook 'markdown-mode-hook 'hide-mode-line)
-;(cons '("\\.markdown" . markdown-mode) auto-mode-alist)
 
 ;; --------------------------------------------------
 ;; Programming languages
@@ -223,36 +198,3 @@
     (read-kbd-macro paredit-backward-delete-key) nil))
 
 (add-hook 'slime-repl-mode-hook 'override-slime-repl-bindings-with-paredit)
-
-;;; HASKELL
-
-;; Pretty symbols
-
-(setq haskell-font-lock-symbols t)
-
-;; mmm-mode for literate Haskell
-
-(defun haskell-mmm-mode ()
-  ;; go into mmm minor mode when class is given
-  (make-local-variable 'mmm-global-mode)
-  (setq mmm-global-mode 'true))
-
-(add-hook 'haskell-mode-hook 'haskell-mmm-mode)
-
-(mmm-add-classes
- '((literate-haskell-bird
-    :submode text-mode
-    :front "^[^>]"
-    :include-front true
-    :back "^>\\|$"
-    )
-   (literate-haskell-latex
-    :submode literate-haskell-mode
-    :front "^\\\\begin{code}"
-    :front-offset (end-of-line 1)
-    :back "^\\\\end{code}"
-    :include-back nil
-    :back-offset (beginning-of-line -1)
-    )))
-
-(setq mmm-submode-decoration-level 0)
