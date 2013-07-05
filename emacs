@@ -103,6 +103,16 @@
   (local-set-key (kbd "RET") 'newline-and-indent))
 (add-hook 'lisp-mode-hook 'set-newline-and-indent)
 
+;; snippets
+(add-to-list 'load-path
+              "~/elisp/yasnippet")
+(require 'yasnippet)
+(yas-global-mode 1)
+
+;; rainbow delimiters
+(require 'rainbow-delimiters)
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+
 ;; pretty symbols - individual languages to be implemented in respective sections
 (defun unicode-symbol (name)
     "Translate a symbolic name for a Unicode character -- e.g., LEFT-ARROW
@@ -198,3 +208,6 @@
     (read-kbd-macro paredit-backward-delete-key) nil))
 
 (add-hook 'slime-repl-mode-hook 'override-slime-repl-bindings-with-paredit)
+
+;;; PYTHON
+
