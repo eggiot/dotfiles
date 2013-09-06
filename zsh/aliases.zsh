@@ -5,25 +5,8 @@ function changecolour () {
 ##############
 # MY ALIASES #
 ##############
-# package management
-alias pkg="aptitude"
-alias spkg="sudo aptitude"
-alias spkgi="sudo aptitude -P install"
-alias spkgu="sudo aptitude update; sudo aptitude safe-upgrade"
-alias spkgsu="sudo aptitude safe-upgrade"
-alias spkgr="sudo aptitude -P remove"
-alias spkgc="sudo aptitude clean"
-alias pkgs="aptitude search"
-alias pkgsh="aptitude show"
-alias pkgd="aptitude download"
-alias pkgsf="apt-cache-formatted"
 
-alias debinstall="sudo dpkg -i"
-alias debunpack="dpkg --unpack"
-alias debconfigure="dpkg --configure"
-alias debremove="dpkg --remove"
-alias debshow="dpkg-deb --show"
-alias debrmlock="sudo rm /var/lib/dpkg/lock; sudo dpkg --configure -a"
+source ~/dotfiles/zsh/aliases/pkg.zsh
 
 ## directory navigation
 alias desktop="~/Desktop"
