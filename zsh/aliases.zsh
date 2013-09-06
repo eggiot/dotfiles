@@ -1,49 +1,6 @@
-# Path to your oh-my-zsh configuration.
-ZSH=$HOME/.oh-my-zsh
-
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-ZSH_THEME="edvardm" #muse
-
-# Set to this to use case-sensitive completion
-CASE_SENSITIVE="true"
-
-# Comment this out to disable weekly auto-update checks
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment following line if you want to disable colors in ls
-# DISABLE_LS_COLORS="true"
-
-# Uncomment following line if you want to disable autosetting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment following line if you want red dots to be displayed while waiting for completion
-# COMPLETION_WAITING_DOTS="true"
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git command-not-found python)
-
-source $ZSH/oh-my-zsh.sh
-
-# Customize to your needs...
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
-
-############
-# MY SETUP #
-############
-if ! [ $TERM ] ; then
-    eval `tset -s -Q`
-    case $TERM in
-      con*|vt100) tset -Q -e ^?
-        ;;
-    esac
-fi
-
-export PATH=/home/eliot/bin:$PATH
-
+function changecolour () {
+    sed "s/$2/$(tput setaf $1)$2$(tput sgr0)/"
+}
 
 ##############
 # MY ALIASES #
@@ -80,9 +37,11 @@ alias semacs="sudo emacs -nw"
 alias sgedit="gksudo gedit"
 
 # shortened
-fp() {ps ax -o pid,command | grep $1 | sed -e "/[0-9] grep $1/d" -e "/[0-9] sed /d" | sed G} # find a running process
+# find a running process
+fp() {
+    ps ax -o pid,command | grep $1 | sed -e "/[0-9] grep $1/d" -e "/[0-9] sed /d" | sed G | changecolour 2 $1
+}
 alias turnoff="sudo shutdown -h now" # shut down the computer
-alias alsa-lmms="pasuspender -- lmms" # start lmms using alsa
 alias ff="ls -a | grep" # find file
 alias set-menu-button-layout="gconftool-2 --set /apps/metacity/general/button_layout --type string"
 alias delete-thumbnails="find ~/.thumbnails -type f -exec rm {} \;"
@@ -113,8 +72,6 @@ rfind() {find -ls | grep $1 | sed "s/^.* //"}
 
 # functionality changes
 alias less="most"
-#alias less="vim -u ~/.vimrc.pager -"
-#alias emacs="emacs -nw"
 
 # media
 alias pinknoise="play -n synth pinknoise"
@@ -142,7 +99,6 @@ alias ping="ping -c 3"
 alias aweb='wget --quiet --page-requisites --convert-links'
 
 # programming
-
 syscall() {w3m -no-graph ~/.linux-syscall.html | grep $1 | sed 's/|//g'}
 
 # create directory and enter it
@@ -191,5 +147,3 @@ make-password () {
 make-sorted-file-list () {
     find -maxdepth 1 -type f -iname \*$1 | sort > $2
 }
-# 256 colours
-#export TERM=xterm-256color
