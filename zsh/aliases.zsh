@@ -1,12 +1,13 @@
-function changecolour () {
-    sed "s/$2/$(tput setaf $1)$2$(tput sgr0)/"
-}
-
 ##############
 # MY ALIASES #
 ##############
 
 source ~/dotfiles/zsh/aliases/pkg.zsh
+source ~/dotfiles/zsh/aliases/suffixes.zsh
+source ~/dotfiles/zsh/aliases/media.zsh
+source ~/dotfiles/zsh/aliases/programming.zsh
+source ~/dotfiles/zsh/aliases/search.zsh
+source ~/dotfiles/zsh/aliases/security.zsh
 
 ## directory navigation
 alias desktop="~/Desktop"
@@ -20,12 +21,7 @@ alias semacs="sudo emacs -nw"
 alias sgedit="gksudo gedit"
 
 # shortened
-# find a running process
-fp() {
-    ps ax -o pid,command | grep $1 | sed -e "/[0-9] grep $1/d" -e "/[0-9] sed /d" | sed G | changecolour 2 $1
-}
 alias turnoff="sudo shutdown -h now" # shut down the computer
-alias ff="ls -a | grep" # find file
 alias set-menu-button-layout="gconftool-2 --set /apps/metacity/general/button_layout --type string"
 alias delete-thumbnails="find ~/.thumbnails -type f -exec rm {} \;"
 
@@ -51,38 +47,16 @@ fi
 
 alias rmr="rm -R"
 
-rfind() {find -ls | grep $1 | sed "s/^.* //"}
-
 # functionality changes
 alias less="most"
-
-# media
-alias pinknoise="play -n synth pinknoise"
-alias brownnoise="play -n synth brownnoise"
-alias whitenoise="play -n synth whitenoise"
-alias scrot="scrot -q 100"
-alias groovesalad="mplayer -playlist http://somafm.com/groovesalad.pls"
 
 # git
 alias gcm="git commit -a -m"
 alias gra="git remote add"
 
-# register specific applications for suffixes
-alias -s png=feh
-alias -s jpg=feh
-alias -s jpeg=feh
-alias -s html=w3m
-alias -s org=w3m
-alias -s avi=mplayer
-alias -s flac=play
-alias -s wav=play
-
 # networking
 alias ping="ping -c 3"
 alias aweb='wget --quiet --page-requisites --convert-links'
-
-# programming
-syscall() {w3m -no-graph ~/.linux-syscall.html | grep $1 | sed 's/|//g'}
 
 # create directory and enter it
 mdc() {mkdir -p "$1" && cd "$1"}
@@ -91,42 +65,21 @@ mdc() {mkdir -p "$1" && cd "$1"}
 extract () {
     if [ -f $1 ] ; then
         case $1 in
-            *.tar.bz2)   tar xjf $1        ;;
-            *.tar.gz)    tar xzf $1     ;;
-            *.bz2)       bunzip2 $1       ;;
-            *.rar)       rar x $1     ;;
+            *.tar.bz2)   tar xjf $1    ;;
+            *.tar.gz)    tar xzf $1    ;;
+            *.bz2)       bunzip2 $1    ;;
+            *.rar)       rar x $1      ;;
             *.gz)        gunzip $1     ;;
-            *.tar)       tar xf $1        ;;
-            *.tbz2)      tar xjf $1      ;;
-            *.tgz)       tar xzf $1       ;;
-            *.zip)       unzip $1     ;;
-            *.Z)         uncompress $1  ;;
-            *.7z)        7z x $1    ;;
-	    *.rar)       unrar e $1    ;;
+            *.tar)       tar xf $1     ;;
+            *.tbz2)      tar xjf $1    ;;
+            *.tgz)       tar xzf $1    ;;
+            *.zip)       unzip $1      ;;
+            *.Z)         uncompress $1 ;;
+            *.7z)        7z x $1       ;;
+	    *.rar)       unrar e $1        ;;
             *)           echo "'$1' cannot be extracted via extract()" ;;
         esac
     else
         echo "'$1' is not a valid file"
     fi
-}
-
-# search a man page for a pattern
-manfind() {
-    man $1 | grep $2
-}
-
-# wipe hard drive
-
-security_wipe_hd () {
-    # overwrite a drive with random data 7 times - for sensitive data
-    for n in `seq 7`; do dd if=/dev/urandom of=$1 bs=8b conv=notrunc; done
-}
-
-make-password () {
-    cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w $1 | head -n 1
-}
-
-# create a playlist / create sorted list of files
-make-sorted-file-list () {
-    find -maxdepth 1 -type f -iname \*$1 | sort > $2
 }
