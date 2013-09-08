@@ -8,8 +8,10 @@ alias ff="ls -a | grep"
 
 # recursive find file
 rff() {
-	find -ls | grep $1 | sed "s/^.* //"
+	find -ls | grep $1 | strip_long_ls
 }
+
+alias cff="locate"
 
 # search a man page for a pattern
 manfind() {
