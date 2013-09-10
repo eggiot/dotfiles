@@ -11,6 +11,7 @@ rff() {
 	find -ls | grep $1 | strip_long_ls
 }
 
+# find file anywhere on disc
 alias cff="locate"
 
 # search a man page for a pattern

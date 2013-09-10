@@ -1,11 +1,13 @@
+
 fileinfo_raw ()
 {
-	for f in *;
-		do printf "$(expr substr $f 1 20)\`" && get_file_info $1 $f 2>/dev/null | awk '
+	awk_command='
 		BEGIN {
 			OFS="`"
 		}
 		{print $2, $1}'
+	for f in *;
+		do printf "$(expr substr $f 1 30)\`" && get_file_info $1 $f | awk $awk_command
 	done
 }
 

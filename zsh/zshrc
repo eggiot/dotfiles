@@ -5,7 +5,7 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="edvardm" #muse
+ZSH_THEME="dieter"
 
 # Set to this to use case-sensitive completion
 CASE_SENSITIVE="true"
@@ -43,6 +43,9 @@ if ! [ $TERM ] ; then
 fi
 
 export PATH=/home/eliot/bin:$PATH
+
+# history substring search
+source $ZSH/plugins/history-substring-search/history-substring-search.zsh
 
 # include aliases
 

@@ -45,7 +45,7 @@ main = do
 terminalCmd = "urxvt -fn xft:Consolas:size=16:antialias=true:autohinting=true"
 fileCmd = terminalCmd ++ " -e mc"
 browserCmd = "firefox --app /home/eliot/bin/conkeror/application.ini"
-textCmd = "emacsclient -c"
+textCmd = "subl"
 
 -- locations
 scriptDir = "~/scripts/"
