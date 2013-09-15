@@ -27,3 +27,43 @@ filesexec () {
 }
 
 alias fileexec="filesexec"
+
+# Swap 2 filenames around.
+function swap() {
+    local TMPFILE=tmp.$$
+
+    [ $# -ne 2 ] && echo "swap: 2 arguments needed" && return 1
+    [ ! -e $1 ] && echo "swap: $1 does not exist" && return 1
+    [ ! -e $2 ] && echo "swap: $2 does not exist" && return 1
+
+    mv "$1" $TMPFILE
+    mv "$2" "$1"
+    mv $TMPFILE "$2"
+}
+
+# Creates an archive (*.tar.gz) from given directory.
+function maketar() {
+    tar cvzf "$1.tar.gz"  "$1";
+}
+
+# Create a ZIP archive of a file or folder.
+function makezip() { zip -r "1.zip" "$1" ; }
+
+# gets info about a file - basically a wrapper around stat
+get_file_info()
+{
+    info=""
+        case $1 in
+            'owner')    info='%U';;
+            'type')     info='%F';;
+            'creation') info='%w';;
+            'modified') info='%y';;
+            'access')   info='%w';;
+            'change')   info='%z';;
+            'size')     info='%s';;
+            'access')   info='%A';;
+            *)          return 1;;
+        esac
+
+        stat -c $info $2 2>/dev/null
+}

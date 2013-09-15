@@ -8,3 +8,7 @@ alias brownnoise="play -n synth brownnoise"
 alias whitenoise="play -n synth whitenoise"
 alias scrot="scrot -q 100"
 alias groovesalad="mplayer -playlist http://somafm.com/groovesalad.pls"
+
+svg2png () {
+	inkscape --file="$1" --export-png="$2" --export-width=$3
+}

@@ -1,5 +1,16 @@
 source ~/dotfiles/zsh/functions.zsh
 
+red=1
+green=2
+yellow=3
+fawn=3
+blue=4
+purple=5
+pink=5
+cyan=6
+gray=7
+white=8
+
 ##############
 # MY ALIASES #
 ##############

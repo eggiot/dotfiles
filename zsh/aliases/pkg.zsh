@@ -17,7 +17,7 @@ pkgs () {
 }
 
 pkgsf () {
-	apt-cache search $1 | changecolour 2 $1 #| cut -c -$(tput cols)
+	apt-cache search $1 | sed 's/\ -\ /\t/' | column -s $'\t' -t | cut -c -$(tput cols) | changecolour 2 $1
 
 }
 # deb
