@@ -1,213 +1,276 @@
 ;; --------------------------------------------------
 ;; file: ~/.emacs
 ;; author: Eliot Walker
-;; modified: October 2011
+;; modified: September 2018
 ;; --------------------------------------------------
 
-;; --------------------------------------------------
-;; General Setup
-;; --------------------------------------------------
 
-;; when in xemacs
-(when (featurep 'xemacs)
-  (error "This machine runs xemacs, install GNU Emacs first."))
+(require 'cl)
 
-;; set up load path
-(add-to-list 'load-path "~/elisp/")
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
 
-;; no splash screen
-(setq inhibit-splash-screen t)
+(load-file "~/.emacs.d/sensible-defaults.el")
+(sensible-defaults/use-all-settings)
+(sensible-defaults/use-all-keybindings)
+(sensible-defaults/backup-to-temp-directory)
 
-;; make scripts executabe on save
-(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
+(setq ido-enable-flex-matching t)
 
-;; stop \C-Z from backgrounding / minimising emacs
-(global-set-key "\C-Z" nil)
+(setq ido-everywhere t)
 
-;; location
+(ido-mode 1)
 
-(setq calendar-location-name "Solihull, UK")
-(setq calendar-latitude 52.36)
-(setq calendar-longitude -1.79)
+(flx-ido-mode 1)
 
-;; --------------------------------------------------
-;; Display
-;; --------------------------------------------------
+(setq ido-create-new-buffer 'always)
 
-;;; UI
+(ido-vertical-mode 1)
+(setq ido-vertical-define-keys 'C-n-and-C-p-only)
 
-; font
-(setq default-frame-alist '((font . "Everson Mono-16")))
+(smex-initialize)
 
-; Colour theme
-(add-hook 'server-visit-hook 'color-theme-snow)
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
-;; modeline modifications
-; show the time
-(display-time-mode t)
-; show column number
-(column-number-mode t)
-; set italics
-(set-face-italic-p 'modeline t)
+(defun ejw/add-hook-to-all (l f)
+  (dolist (mode l)
+    (add-hook mode f)))
 
-;; no toolbar
-(tool-bar-mode 0)
+(defun ejw/cycle-set (v l)
+  ;; if the variable is already bound
+  (if (boundp v)
+      (let* (
+              ;; the index of the last element
+              (end-index (- (length l) 1))
+              ;; the index of v within the list (nil if v is not in the list)
+              (v-pos (position (eval v) l))
+              ;; the index of the next value in the list
+              (next-index (cond
+                           ;; v is in the list and not at the end -> next element
+                           ((and v-pos (< v-pos end-index)) (+ 1 v-pos))
+                           ;; v is in the list and at the end -> beginning
+                           ((and v-pos (= v-pos end-index)) 0)
+                           ;; v is not in the list -> beginning
+                           ((not v-pos) 0)))
+              ;; get the next value in the list
+              (next-value (nth next-index l)))
+         ;; set the value of v to next-value
+         (set v next-value))
+    ;; if the variable is not already bound
+    (set v (first l))))
 
-;; cursor
-(require 'bar-cursor)
-(bar-cursor-mode 1)
+(defmacro ejw/cycle-setq (v l)
+  `(ejw/cycle-set (quote ,v) ,l))
 
-;; fullscreen
-(defun toggle-fullscreen (&optional f)
-  (interactive)
-  (let ((current-value (frame-parameter nil 'fullscreen)))
-       (set-frame-parameter nil 'fullscreen
-                            (if (equal 'fullboth current-value)
-                                (if (boundp 'old-fullscreen) old-fullscreen nil)
-                                (progn (setq old-fullscreen current-value)
-				       'fullboth)))))
+(setf user-full-name "Eliot J. Walker"
+      user-mail-address "eliot@eliotjwalker.com"
+      calendar-location-name "Solihull, U.K."
+      calendar-latitude 52.3
+      calendar-longitude -1.8)
 
-(global-set-key [f11] 'toggle-fullscreen)
+(setq inhibit-startup-message t)
+(tool-bar-mode -1)
+(toggle-scroll-bar -1)
 
-;; --------------------------------------------------
-;; Modes
-;; --------------------------------------------------
+(setq ring-bell-function 'ignore)
 
-;;; Default mode - text mode and auto-fill
-(setq default-major-mode 'text-mode)
-(add-hook 'text-mode-hook 'visual-line-mode)
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+(setq-default cursor-type 'bar)
 
-(require 'markdown-mode)
+(setq scroll-conservatively 100)
 
-;; --------------------------------------------------
-;; Programming languages
-;; --------------------------------------------------
+(defmacro diminish-minor-mode (filename mode &optional abbrev)
+  `(eval-after-load (symbol-name ,filename)
+     '(diminish ,mode ,abbrev)))
 
-;;; General
+(defmacro diminish-major-mode (mode-hook abbrev)
+  `(add-hook ,mode-hook
+             (lambda () (setq mode-name ,abbrev))))
 
-;; change comint keys
-(require 'comint)
-(define-key comint-mode-map (kbd "M-") 'comint-next-input)
-(define-key comint-mode-map (kbd "M-") 'comint-previous-input)
-(define-key comint-mode-map [down] 'comint-next-matching-input-from-input)
-(define-key comint-mode-map [up] 'comint-previous-matching-input-from-input)
+(diminish-minor-mode 'abbrev 'abbrev-mode)
+(diminish-minor-mode 'simple 'auto-fill-function)
+(diminish-minor-mode 'company 'company-mode)
+(diminish-minor-mode 'eldoc 'eldoc-mode)
+(diminish-minor-mode 'flycheck 'flycheck-mode)
+(diminish-minor-mode 'flyspell 'flyspell-mode)
+(diminish-minor-mode 'global-whitespace 'global-whitespace-mode)
+(diminish-minor-mode 'projectile 'projectile-mode)
+(diminish-minor-mode 'ruby-end 'ruby-end-mode)
+(diminish-minor-mode 'subword 'subword-mode)
+(diminish-minor-mode 'undo-tree 'undo-tree-mode)
+(diminish-minor-mode 'yard-mode 'yard-mode)
+(diminish-minor-mode 'yasnippet 'yas-minor-mode)
+(diminish-minor-mode 'wrap-region 'wrap-region-mode)
 
-;; autocomplete
-(add-to-list 'load-path "~/elisp/auto-complete")
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/elisp/auto-complete/ac-dict")
-(ac-config-default)
+(diminish-minor-mode 'paredit 'paredit-mode " π")
 
-;; auto-indentation
-(defun set-newline-and-indent ()
-  (local-set-key (kbd "RET") 'newline-and-indent))
-(add-hook 'lisp-mode-hook 'set-newline-and-indent)
+(diminish-major-mode 'emacs-lisp-mode-hook "el")
+(diminish-major-mode 'haskell-mode-hook "λ=")
+(diminish-major-mode 'lisp-interaction-mode-hook "λ")
+(diminish-major-mode 'python-mode-hook "Py")
 
-;; snippets
-(add-to-list 'load-path
-              "~/elisp/yasnippet")
-(require 'yasnippet)
-(yas-global-mode 1)
+(setq sml/theme 'powerline)
 
-;; rainbow delimiters
+(sml/setup)
+
+(setq default-font-size 24
+      default-font "Inconsolata-18")
+
+(when (member default-font (font-family-list))
+  (add-to-list 'initial-frame-alist '(font . default-font))
+  (add-to-list 'default-frame-alist '(font . default-font)))
+
+(set-face-attribute 'default nil :height (* default-font-size 10))
+
+(require 'theme-changer)
+(require 'color-theme-sanityinc-tomorrow)
+
+(setf day-theme 'sanityinc-tomorrow-day
+      night-theme 'sanityinc-tomorrow-eighties)
+
+(change-theme day-theme night-theme)
+
+(evil-mode 1)
+
+(global-evil-surround-mode 1)
+
+(projectile-global-mode)
+
+(add-hook 'text-mode-hook 'flyspell-mode)
+
+(add-hook 'text-mode-hook 'turn-on-visual-line-mode)
+
+(global-prettify-symbols-mode +1)
+(setq prettify-symbols-unprettify-at-point t)
+
+(defun unicode-symbol (name)
+  (case name
+        ;; arrows
+        ('left-arrow "←")
+        ('up-arrow "↑")
+        ('right-arrow "→")
+        ('down-arrow "↓")
+        ;; boxes
+        ('double-vertical-bar "║")
+        ;; relational operators
+        ('equal "=")
+        ('not-equal "≠")
+        ('identical "≡")
+        ('not-identical "≢")
+        ('less-than "<")
+        ('greater-than ">")
+        ('less-than-or-equal-to "≤")
+        ('greater-than-or-equal-to "≥")
+        ;; logical operators
+        ('logical-and "∧")
+        ('logical-or "∨")
+        ('logical-neg "¬")
+        ;; misc
+        ('nil "∅")
+        ('horizontal-ellipsis "…")
+        ('double-exclamation "‼")
+        ('prime "′")
+        ('double-prime "″")
+        ('for-all "∀")
+        ('there-exists "∃")
+        ('element-of "∈")
+        ;; mathematical operators
+        ('square-root "√")
+        ('squared "²")
+        ('cubed "³")
+        ;; letters
+        ('lambda "λ")
+        ('alpha "α")
+        ('beta "β")
+        ('gamma "γ")
+        ('delta "δ")))
+
+(defmacro add-pretty-symbol (ascii-string unicode-name)
+  `(push (append '(,ascii-string) (unicode-symbol ,unicode-name)) prettify-symbols-alist))
+
 (require 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
-;; pretty symbols - individual languages to be implemented in respective sections
-(defun unicode-symbol (name)
-    "Translate a symbolic name for a Unicode character -- e.g., LEFT-ARROW
-  or GREATER-THAN into an actual Unicode character code. "
-    (decode-char 'ucs (case name
-                        ;; arrows
-                        ('left-arrow 8592)
-                        ('up-arrow 8593)
-                        ('right-arrow 8594)
-                        ('down-arrow 8595)
-                        ;; boxes
-                        ('double-vertical-bar #X2551)
-                        ;; relational operators
-                        ('equal #X003d)
-                        ('not-equal #X2260)
-                        ('identical #X2261)
-                        ('not-identical #X2262)
-                        ('less-than #X003c)
-                        ('greater-than #X003e)
-                        ('less-than-or-equal-to #X2264)
-                        ('greater-than-or-equal-to #X2265)
-                        ;; logical operators
-                        ('logical-and #X2227)
-                        ('logical-or #X2228)
-                        ('logical-neg #X00AC)
-                        ;; misc
-                        ('nil #X2205)
-                        ('horizontal-ellipsis #X2026)
-                        ('double-exclamation #X203C)
-                        ('prime #X2032)
-                        ('double-prime #X2033)
-                        ('for-all #X2200)
-                        ('there-exists #X2203)
-                        ('element-of #X2208)
-                        ;; mathematical operators
-                        ('square-root #X221A)
-                        ('squared #X00B2)
-                        ('cubed #X00B3)
-                        ;; letters
-                        ('lambda #X03BB)
-                        ('alpha #X03B1)
-                        ('beta #X03B2)
-                        ('gamma #X03B3)
-                        ('delta #X03B4))))
-                        
-(defun substitute-pattern-with-unicode (pattern symbol)
-  "Add a font lock hook to replace the matched part of PATTERN with the 
-  Unicode symbol SYMBOL looked up with UNICODE-SYMBOL."
-  (interactive)
-  (font-lock-add-keywords
-   nil `((,pattern (0 (progn (compose-region (match-beginning 1) (match-end 1)
-                                            ,(unicode-symbol symbol))
-                            nil))))))
-  
-(defun substitute-patterns-with-unicode (patterns)
-  "Call SUBSTITUTE-PATTERN-WITH-UNICODE repeatedly."
-  (mapcar #'(lambda (x)
-              (substitute-pattern-with-unicode (car x)
-                                               (cdr x)))
-          patterns))
+(elpy-enable)
 
-;;; LISP
+(setq lisp-hooks '(emacs-lisp-mode-hook
+                   lisp-mode-hook
+                   scheme-mode-hook
+                   slime-mode-hook
+                   slime-repl-hook))
 
-;; slime
-(add-to-list 'load-path "~/elisp/slime/")
-(setq slime-backend "~/elisp/slime/swank-loader.lisp")
-(require 'slime)
-(add-hook 'lisp-mode-hook (lambda() (slime-mode t)))
-(add-hook 'inferior-lisp-mode-hook (lambda() (inferior-slime-mode t)))
+(autoload 'paredit-mode "paredit" t)
 
-(setq inferior-lisp-program "sbcl")
+(ejw/add-hook-to-all lisp-hooks 'paredit-mode)
 
 (add-to-list 'auto-mode-alist '("\\.lisp$" . lisp-mode))
 (add-to-list 'auto-mode-alist '("\\.cl$" . lisp-mode))
 (add-to-list 'auto-mode-alist '("\\.asd$" . lisp-mode))
 
-(slime-setup '(slime-fancy))
+(add-hook 'lisp-mode-hook (lambda() (slime-mode t)))
+(add-hook 'inferior-lisp-mode-hook (lambda() (inferior-slime-mode t)))
 
-;; Paredit - all forms of lisp should use this rather than autopair
+(setq inferior-lisp-program "/opt/local/bin/sbcl")
 
-; enable paredit
-(autoload 'paredit-mode "paredit" t)
-(add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
-(add-hook 'lisp-mode-hook (lambda () (paredit-mode +1)))
-(add-hook 'scheme-mode-hook (lambda () (paredit-mode +1)))
-(add-hook 'slime-mode-hook (lambda() (paredit-mode +1)))
-(add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
+(setq slime-contribs '(slime-fancy))
 
-; stop slime's repl from grabbing DEL
-; which is annying when backspacing over a '('
-(defun override-slime-repl-bindings-with-paredit ()
-  (define-key slime-repl-mode-map
-    (read-kbd-macro paredit-backward-delete-key) nil))
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
 
-(add-hook 'slime-repl-mode-hook 'override-slime-repl-bindings-with-paredit)
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (add-pretty-symbol "->" 'right-arrow)
+            (add-pretty-symbol "<-" 'left-arrow)
+            (add-pretty-symbol "==" 'identical)
+            (add-pretty-symbol "/=" 'not-identical)
+            (add-pretty-symbol "<=" 'less-than-or-equal-to)
+             (add-pretty-symbol ">=" 'greater-than-or-equal-to)))
 
-;;; PYTHON
+(add-hook 'org-mode-hook
+          (lambda ()
+            (org-bullets-mode t)))
 
+(setq org-ellipsis "⤶")
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (lisp . t)
+   (python . t)
+   (haskell . t)
+   (js . t)))
+
+(setq org-src-fontify-natively t
+      org-src-preserve-indentation t
+      org-src-tab-acts-natively t)
+
+(add-to-list 'org-structure-template-alist
+             '("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
+
+(require 'ox-md)
+(require 'ox-beamer)
+
+(setq org-export-with-smart-quotes t)
+
+(setq org-html-postamble nil)
+
+(setenv "BROWSER" "open /Applications/Google\ Chrome.app")
+
+(setq org-latex-pdf-process
+      '("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
+(add-to-list 'org-latex-packages-alist '("" "minted"))
+(setq org-latex-listings 'minted)
+
+(defvar custom-bindings-map (make-keymap)
+  "A keymap for custom bindings.")
+
+(define-key custom-bindings-map (kbd "C->")  'er/expand-region)
+(define-key custom-bindings-map (kbd "C-<")  'er/contract-region)
+
+(define-minor-mode custom-bindings-mode
+  "A mode that activates custom-bindings."
+  t nil custom-bindings-map)
